@@ -3,12 +3,45 @@
  */
 package pro.analyticslab.bot;
 
+import net.dv8tion.jda.api.entities.Activity;
+import net.dv8tion.jda.api.entities.emoji.Emoji;
+import net.dv8tion.jda.api.requests.GatewayIntent;
+import net.dv8tion.jda.api.sharding.DefaultShardManagerBuilder;
+import net.dv8tion.jda.api.sharding.ShardManager;
+import net.dv8tion.jda.api.utils.cache.CacheFlag;
+
 public class App {
-    public String getGreeting() {
-        return "ыыы!";
+    public ShardManager shardManager;
+
+    public App() {
+        DefaultShardManagerBuilder builder = DefaultShardManagerBuilder.createDefault(
+                "",
+                GatewayIntent.GUILD_MEMBERS, GatewayIntent.GUILD_PRESENCES, GatewayIntent.MESSAGE_CONTENT,
+                GatewayIntent.GUILD_EMOJIS_AND_STICKERS, GatewayIntent.GUILD_MESSAGES, GatewayIntent.GUILD_VOICE_STATES,
+                GatewayIntent.GUILD_INVITES, GatewayIntent.GUILD_WEBHOOKS, GatewayIntent.SCHEDULED_EVENTS
+        )
+                .enableCache(
+                        CacheFlag.MEMBER_OVERRIDES,
+                        CacheFlag.EMOJI,
+                        CacheFlag.STICKER,
+                        CacheFlag.VOICE_STATE
+                )
+                .disableCache(
+                        CacheFlag.ACTIVITY,
+                        CacheFlag.CLIENT_STATUS,
+                        CacheFlag.FORUM_TAGS,
+                        CacheFlag.ONLINE_STATUS,
+                        CacheFlag.ROLE_TAGS,
+                        CacheFlag.SCHEDULED_EVENTS
+                )
+                .setActivity(Activity.listening("music " + Emoji.fromUnicode("\uD83C\uDFB5").getFormatted()))
+                .setShardsTotal(-1)
+                .addEventListeners();
+
+        shardManager = builder.build();
     }
 
     public static void main(String[] args) {
-        System.out.println(new App().getGreeting());
+        new App();
     }
 }
