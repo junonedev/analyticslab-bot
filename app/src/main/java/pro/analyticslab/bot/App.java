@@ -34,7 +34,9 @@ public class App {
                         CacheFlag.ROLE_TAGS,
                         CacheFlag.SCHEDULED_EVENTS
                 )
-                .setActivity(Activity.listening("music " + Emoji.fromUnicode("\uD83C\uDFB5").getFormatted()))
+                .setActivity(Activity.watching(
+                        "the bot wakes up... " + Emoji.fromUnicode("\uD83D\uDCA4").getFormatted()
+                ))
                 .setShardsTotal(-1)
                 .addEventListeners();
 
