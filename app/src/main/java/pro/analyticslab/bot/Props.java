@@ -35,7 +35,4 @@ public class Props {
 
         return value;
     }
-
-
-
 }
