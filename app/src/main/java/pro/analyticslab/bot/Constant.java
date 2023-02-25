@@ -7,10 +7,8 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import javax.annotation.Nonnull;
-import javax.annotation.Nullable;
 import java.io.*;
 import java.time.OffsetDateTime;
-import java.util.Arrays;
 import java.util.List;
 import java.util.Objects;
 
@@ -30,7 +28,7 @@ public class Constant {
      * Translation system initialization
      * @param filePath Translation file
      */
-    public void loadTranslations(@Nonnull String filePath) throws IOException {
+    public void loadTranslations(@Nonnull String filePath) {
         Gson gson = new Gson();
 
         Reader reader = new InputStreamReader(Objects.requireNonNull(
