@@ -19,6 +19,7 @@ public class Constant {
     public static final List<String> SUPPORT_LOCALES = List.of(Props.getProperty(
             "analyticslab.options.locales.support").split(","));
     public static final String PRIMARY_LOCALE = Props.getProperty("analyticslab.options.locales.primary");
+    public static final List<String> OWNER_IDS = List.of(Props.getProperty("analyticslab.owners").split(","));
 
 
     // translation system
