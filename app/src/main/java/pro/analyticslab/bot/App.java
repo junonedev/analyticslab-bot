@@ -17,9 +17,7 @@ public class App {
     public App() {
         DefaultShardManagerBuilder builder = DefaultShardManagerBuilder.createDefault(
                 Props.getProperty("analyticslab.discord.auth"),
-                GatewayIntent.GUILD_MEMBERS, GatewayIntent.GUILD_PRESENCES, GatewayIntent.MESSAGE_CONTENT,
-                GatewayIntent.GUILD_EMOJIS_AND_STICKERS, GatewayIntent.GUILD_MESSAGES, GatewayIntent.GUILD_VOICE_STATES,
-                GatewayIntent.GUILD_INVITES, GatewayIntent.GUILD_WEBHOOKS, GatewayIntent.SCHEDULED_EVENTS
+                GatewayIntent.GUILD_MEMBERS, GatewayIntent.GUILD_VOICE_STATES
         )
                 .setMemberCachePolicy(MemberCachePolicy.NONE)
                 .enableCache(
