@@ -8,6 +8,7 @@ import net.dv8tion.jda.api.entities.emoji.Emoji;
 import net.dv8tion.jda.api.requests.GatewayIntent;
 import net.dv8tion.jda.api.sharding.DefaultShardManagerBuilder;
 import net.dv8tion.jda.api.sharding.ShardManager;
+import net.dv8tion.jda.api.utils.MemberCachePolicy;
 import net.dv8tion.jda.api.utils.cache.CacheFlag;
 
 public class App {
@@ -15,11 +16,12 @@ public class App {
 
     public App() {
         DefaultShardManagerBuilder builder = DefaultShardManagerBuilder.createDefault(
-                "",
+                Props.getProperty("analyticslab.discord.auth"),
                 GatewayIntent.GUILD_MEMBERS, GatewayIntent.GUILD_PRESENCES, GatewayIntent.MESSAGE_CONTENT,
                 GatewayIntent.GUILD_EMOJIS_AND_STICKERS, GatewayIntent.GUILD_MESSAGES, GatewayIntent.GUILD_VOICE_STATES,
                 GatewayIntent.GUILD_INVITES, GatewayIntent.GUILD_WEBHOOKS, GatewayIntent.SCHEDULED_EVENTS
         )
+                .setMemberCachePolicy(MemberCachePolicy.NONE)
                 .enableCache(
                         CacheFlag.MEMBER_OVERRIDES,
                         CacheFlag.EMOJI,
@@ -43,7 +45,9 @@ public class App {
         shardManager = builder.build();
     }
 
-    public static void main(String[] args) {
+    public static void main(String[] args) throws Exception {
+        new Props().load(".properties");
+
         new App();
     }
 }
