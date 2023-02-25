@@ -45,8 +45,7 @@ public class App {
 
     public static void main(String[] args) throws Exception {
         new Props().load("source/config/.properties");
-        new Constant()
-                .loadTranslations("source/translator/messages.json");
+        new Constant().loadTranslations("source/translator/messages.json");
 
         new App();
     }
