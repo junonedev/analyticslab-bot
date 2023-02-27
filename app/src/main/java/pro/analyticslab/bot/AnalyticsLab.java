@@ -11,17 +11,28 @@ import net.dv8tion.jda.api.sharding.DefaultShardManagerBuilder;
 import net.dv8tion.jda.api.sharding.ShardManager;
 import net.dv8tion.jda.api.utils.MemberCachePolicy;
 import net.dv8tion.jda.api.utils.cache.CacheFlag;
+import pro.analyticslab.bot.util.services.ServiceManager;
+import pro.analyticslab.bot.util.services.ServiceManagerBuilder;
 import pro.analyticslab.bot.util.slashcommands.SlashCommandsClientBuilder;
 
-public class App {
-    public ShardManager shardManager;
+public class AnalyticsLab {
+    private final ShardManager shardManager;
+    private final ServiceManager serviceManager;
 
-    public App() {
+
+    public AnalyticsLab() {
         SlashCommandsClientBuilder slashCommandsClientBuilder = SlashCommandsClientBuilder.initialize()
                 .setOwners()
                 .setCommands();
 
-        DefaultShardManagerBuilder builder = DefaultShardManagerBuilder.createDefault(
+
+        ServiceManagerBuilder serviceManagerBuilder = ServiceManagerBuilder.initialize(this)
+                .addServices();
+
+        serviceManager = serviceManagerBuilder.build();
+
+
+        DefaultShardManagerBuilder shardManagerBuilder = DefaultShardManagerBuilder.createDefault(
                 Props.getProperty("analyticslab.discord.auth"),
                 GatewayIntent.GUILD_MEMBERS, GatewayIntent.GUILD_VOICE_STATES,
                 GatewayIntent.GUILD_EMOJIS_AND_STICKERS, GatewayIntent.GUILD_VOICE_STATES
@@ -47,16 +58,25 @@ public class App {
                 .setShardsTotal(-1)
                 .addEventListeners(
                         new Listener(),
-                        slashCommandsClientBuilder.build() // custom commands handler module
+                        slashCommandsClientBuilder.build(), // custom commands handler module
+                        serviceManager // custom service manager
                 );
 
-        shardManager = builder.build();
+        shardManager = shardManagerBuilder.build();
     }
 
     public static void main(String[] args) throws Exception {
         new Props().load("source/config/.properties");
         new Constant().loadTranslations("source/translator/messages.json");
 
-        new App();
+        new AnalyticsLab();
+    }
+
+    public ShardManager getShardManager() {
+        return shardManager;
+    }
+
+    public ServiceManager getServiceManager() {
+        return serviceManager;
     }
 }

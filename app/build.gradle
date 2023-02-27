@@ -32,5 +32,5 @@ dependencies {
 
 application {
     // Define the main class for the application.
-    mainClass = 'pro.analyticslab.bot.App'
+    mainClass = 'pro.analyticslab.bot.AnalyticsLab'
 }
