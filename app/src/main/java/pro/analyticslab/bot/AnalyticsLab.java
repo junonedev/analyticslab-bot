@@ -33,7 +33,7 @@ public class AnalyticsLab {
 
 
         DefaultShardManagerBuilder shardManagerBuilder = DefaultShardManagerBuilder.createDefault(
-                Props.getProperty("analyticslab.discord.auth"),
+                Config.getProperty("analyticslab.discord.auth"),
                 GatewayIntent.GUILD_MEMBERS, GatewayIntent.GUILD_VOICE_STATES,
                 GatewayIntent.GUILD_EMOJIS_AND_STICKERS, GatewayIntent.GUILD_VOICE_STATES
         )
@@ -66,8 +66,8 @@ public class AnalyticsLab {
     }
 
     public static void main(String[] args) throws Exception {
-        new Props().load("source/config/.properties");
-        new Constant().loadTranslations("source/translator/messages.json");
+        new Config().loadProperties("source/config/.properties");
+        new Variables().loadTranslator("source/translator/messages.json");
 
         new AnalyticsLab();
     }

@@ -7,38 +7,46 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import javax.annotation.Nonnull;
-import java.io.*;
+import java.io.InputStreamReader;
+import java.io.Reader;
 import java.time.OffsetDateTime;
 import java.util.List;
 import java.util.Objects;
 
-public class Constant {
-    private static final Logger logger = LoggerFactory.getLogger("Constant");
+public class Variables {
+    private static final Logger logger = LoggerFactory.getLogger(Variables.class);
+
+
     public static final OffsetDateTime STARTUP = OffsetDateTime.now();
-    public static final String SUPPORT_GUILD_ID = Props.getProperty("analyticslab.guild.id");
-    public static final List<String> SUPPORT_LOCALES = List.of(Props.getProperty(
+    public static final String SUPPORT_GUILD_ID = Config.getProperty("analyticslab.guild.id");
+    public static final List<String> SUPPORT_LOCALES = List.of(Config.getProperty(
             "analyticslab.options.locales.support").split(","));
-    public static final String PRIMARY_LOCALE = Props.getProperty("analyticslab.options.locales.primary");
-    public static final List<String> OWNER_IDS = List.of(Props.getProperty("analyticslab.owners").split(","));
+    public static final String PRIMARY_LOCALE = Config.getProperty("analyticslab.options.locales.primary");
+    public static final List<String> OWNER_IDS = List.of(Config.getProperty("analyticslab.owners").split(","));
+    public static final boolean REBOOT_DIED_SHARD = Objects.equals(
+            Config.getProperty("analyticslab.options.rebootDiedShard"), "true");
+
 
 
     // translation system
     private static JsonObject json;
 
+
     /**
-     * Translation system initialization
-     * @param filePath Translation file
+     * Loads json file with translations
+     * @param translatePath translation path
      */
-    public void loadTranslations(@Nonnull String filePath) {
+    public void loadTranslator(@Nonnull String translatePath) {
         Gson gson = new Gson();
 
         Reader reader = new InputStreamReader(Objects.requireNonNull(
-                Constant.class.getClassLoader().getResourceAsStream(filePath)));
+                Variables.class.getClassLoader().getResourceAsStream(translatePath)));
 
         json = gson.fromJson(reader, JsonObject.class);
 
         logger.info("Translator initialized");
     }
+
 
     private static JsonElement getTranslatedElement(String key, String locale) {
         String[] keys = (key + (locale == null ? "" : "." + locale)).split("\\.");

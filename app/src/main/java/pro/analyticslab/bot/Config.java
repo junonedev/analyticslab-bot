@@ -7,19 +7,18 @@ import javax.annotation.Nonnull;
 import java.io.IOException;
 import java.util.Properties;
 
-public class Props {
-    private static final Logger logger = LoggerFactory.getLogger("Props");
+public class Config {
+    private static final Logger logger = LoggerFactory.getLogger(Config.class);
+
+
+    // PROPERTIES
     private static final Properties props = new Properties();
 
-
-    /**
-     * Initialize properties module
-     * @param filePath Path starts from `/resources` directory
-     */
-    public void load(@Nonnull String filePath) throws IOException {
-        props.load(App.class.getClassLoader().getResourceAsStream(filePath));
+    public void loadProperties(@Nonnull String propsPath) throws IOException {
+        props.load(AnalyticsLab.class.getClassLoader().getResourceAsStream(propsPath));
         logger.info("Property file initialized");
     }
+
 
     /**
      * Get secret environment from `.properties` file
