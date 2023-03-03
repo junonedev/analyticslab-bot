@@ -27,7 +27,8 @@ public class AnalyticsLab {
 
 
         ServiceManagerBuilder serviceManagerBuilder = ServiceManagerBuilder.initialize(this)
-                .addServices();
+                .addServices(
+                );
 
         serviceManager = serviceManagerBuilder.build();
 

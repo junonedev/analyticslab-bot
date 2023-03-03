@@ -32,11 +32,11 @@ public class ServiceManagerBuilder {
      */
     public ServiceManagerBuilder addServices(@Nonnull Service... sv) {
         for (Service function : sv) {
-            if (services.get(function.getThreadName()) != null) {
-                throw new RuntimeException(function.getThreadName() + " another thread with this name is found");
+            if (services.get(function.threadName) != null) {
+                throw new RuntimeException(function.threadName + " another thread with this name is found");
             }
 
-            services.put(function.getThreadName(), function);
+            services.put(function.threadName, function);
         }
         return this;
     }

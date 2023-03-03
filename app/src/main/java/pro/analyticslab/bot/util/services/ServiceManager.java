@@ -21,11 +21,6 @@ public class ServiceManager extends ListenerAdapter {
     private final AnalyticsLab root;
 
 
-    public Service getService(@Nonnull String key) {
-        return services.get(key);
-    }
-
-
     public ServiceManager(
             HashMap<String, Service> services,
             HashMap<String, ScheduledExecutorService> scheduled,
@@ -42,18 +37,18 @@ public class ServiceManager extends ListenerAdapter {
 
     private void run(@Nonnull Service s) {
         final ScheduledExecutorService service = Executors.newSingleThreadScheduledExecutor((r) -> {
-            final Thread thread = new Thread(r, s.getThreadName());
+            final Thread thread = new Thread(r, s.threadName);
             thread.setDaemon(true);
             return thread;
         });
         service.scheduleAtFixedRate(() -> {
-            if (s.isEnabled()) {
-                s.getFunction().invoke(root, s);
-                s.setLastRuntime(OffsetDateTime.now(ZoneOffset.UTC).toEpochSecond());
+            if (s.isEnabled) {
+                s.exec(root, s);
+                s.lastRuntime = OffsetDateTime.now(ZoneOffset.UTC).toEpochSecond();
             }
-        }, s.getDelay(), s.getStartDelay(), s.getPeriodType());
+        }, s.delay, s.startDelay, s.periodType);
 
-        scheduledExecutorServiceHashMap.put(s.getThreadName(), service);
+        scheduledExecutorServiceHashMap.put(s.threadName, service);
     }
 
 
@@ -61,7 +56,7 @@ public class ServiceManager extends ListenerAdapter {
     public void onReady(@Nonnull ReadyEvent event) {
         logger.info(
                 "Starting " + services.size() + " threads (tasks)... (" +
-                        services.values().stream().filter(Service::isEnabled).count() + "/" +
+                        services.values().stream().filter(p -> p.isEnabled).count() + "/" +
                         services.size() + " enabled)"
         );
         services.forEach((k, v) -> run(v));
