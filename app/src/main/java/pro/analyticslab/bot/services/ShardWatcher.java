@@ -8,7 +8,7 @@ import net.dv8tion.jda.internal.JDAImpl;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import pro.analyticslab.bot.AnalyticsLab;
-import pro.analyticslab.bot.Variables;
+import pro.analyticslab.bot.util.Variables;
 import pro.analyticslab.bot.util.services.Service;
 
 import javax.annotation.Nonnull;
