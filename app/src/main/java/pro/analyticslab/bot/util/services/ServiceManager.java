@@ -4,11 +4,8 @@ import net.dv8tion.jda.api.events.session.ReadyEvent;
 import net.dv8tion.jda.api.hooks.ListenerAdapter;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import pro.analyticslab.bot.AnalyticsLab;
 
 import javax.annotation.Nonnull;
-import java.time.OffsetDateTime;
-import java.time.ZoneOffset;
 import java.util.HashMap;
 import java.util.concurrent.Executors;
 import java.util.concurrent.ScheduledExecutorService;
@@ -18,17 +15,14 @@ public class ServiceManager extends ListenerAdapter {
 
     private final HashMap<String, Service> services;
     private final HashMap<String, ScheduledExecutorService> scheduledExecutorServiceHashMap;
-    private final AnalyticsLab root;
 
 
     public ServiceManager(
             HashMap<String, Service> services,
-            HashMap<String, ScheduledExecutorService> scheduled,
-            AnalyticsLab root
+            HashMap<String, ScheduledExecutorService> scheduled
     ) {
         this.services = services;
         this.scheduledExecutorServiceHashMap = scheduled;
-        this.root = root;
 
         logger.info(ServiceManager.class.getSimpleName() + " built (" + services.size() +
                 " services initialized)");
@@ -36,17 +30,13 @@ public class ServiceManager extends ListenerAdapter {
 
 
     private void run(@Nonnull Service s) {
-        final ScheduledExecutorService service = Executors.newSingleThreadScheduledExecutor((r) -> {
-            final Thread thread = new Thread(r, s.threadName);
+        ScheduledExecutorService service = Executors.newSingleThreadScheduledExecutor((r) -> {
+            Thread thread = new Thread(r, s.threadName);
             thread.setDaemon(true);
             return thread;
         });
-        service.scheduleAtFixedRate(() -> {
-            if (s.isEnabled) {
-                s.exec(root, s);
-                s.lastRuntime = OffsetDateTime.now(ZoneOffset.UTC).toEpochSecond();
-            }
-        }, s.delay, s.startDelay, s.periodType);
+        // todo: enabled? filter
+        service.scheduleAtFixedRate(s::exec, s.delay, s.startDelay, s.periodType);
 
         scheduledExecutorServiceHashMap.put(s.threadName, service);
     }
@@ -56,7 +46,7 @@ public class ServiceManager extends ListenerAdapter {
     public void onReady(@Nonnull ReadyEvent event) {
         logger.info(
                 "Starting " + services.size() + " threads (tasks)... (" +
-                        services.values().stream().filter(p -> p.isEnabled).count() + "/" +
+                        services.values().stream().filter(s -> true).count() + "/" + // todo: enabled? filter
                         services.size() + " enabled)"
         );
         services.forEach((k, v) -> run(v));

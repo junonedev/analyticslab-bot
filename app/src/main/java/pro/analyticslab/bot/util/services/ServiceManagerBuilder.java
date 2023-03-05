@@ -1,7 +1,5 @@
 package pro.analyticslab.bot.util.services;
 
-import pro.analyticslab.bot.AnalyticsLab;
-
 import javax.annotation.Nonnull;
 import java.util.HashMap;
 import java.util.concurrent.ScheduledExecutorService;
@@ -9,19 +7,16 @@ import java.util.concurrent.ScheduledExecutorService;
 public class ServiceManagerBuilder {
     private final HashMap<String, Service> services = new HashMap<>();
     private final HashMap<String, ScheduledExecutorService> scheduledExecutorServiceHashMap = new HashMap<>();
-    private final AnalyticsLab root;
 
 
-    protected ServiceManagerBuilder(AnalyticsLab root) {
-        this.root = root;
-    }
+    protected ServiceManagerBuilder() {}
 
     /**
      * Initialize service management system
      * @return ServiceManagerBuilder
      */
-    public static ServiceManagerBuilder initialize(@Nonnull AnalyticsLab root) {
-        return new ServiceManagerBuilder(root);
+    public static ServiceManagerBuilder initialize() {
+        return new ServiceManagerBuilder();
     }
 
 
@@ -46,6 +41,6 @@ public class ServiceManagerBuilder {
      * @return ServiceManagerBuilder
      */
     public ServiceManager build() {
-        return new ServiceManager(services, scheduledExecutorServiceHashMap, root);
+        return new ServiceManager(services, scheduledExecutorServiceHashMap);
     }
 }
