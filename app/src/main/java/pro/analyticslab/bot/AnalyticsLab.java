@@ -11,13 +11,12 @@ import net.dv8tion.jda.api.sharding.DefaultShardManagerBuilder;
 import net.dv8tion.jda.api.sharding.ShardManager;
 import net.dv8tion.jda.api.utils.MemberCachePolicy;
 import net.dv8tion.jda.api.utils.cache.CacheFlag;
-import pro.analyticslab.bot.util.services.ServiceManager;
+import pro.analyticslab.bot.services.ShardWatcher;
 import pro.analyticslab.bot.util.services.ServiceManagerBuilder;
 import pro.analyticslab.bot.util.slashcommands.SlashCommandsClientBuilder;
 
 public class AnalyticsLab {
     private final ShardManager shardManager;
-    private final ServiceManager serviceManager;
 
 
     public AnalyticsLab() {
@@ -26,11 +25,10 @@ public class AnalyticsLab {
                 .setCommands();
 
 
-        ServiceManagerBuilder serviceManagerBuilder = ServiceManagerBuilder.initialize(this)
+        ServiceManagerBuilder serviceManagerBuilder = ServiceManagerBuilder.initialize()
                 .addServices(
+                        new ShardWatcher(this)
                 );
-
-        serviceManager = serviceManagerBuilder.build();
 
 
         DefaultShardManagerBuilder shardManagerBuilder = DefaultShardManagerBuilder.createDefault(
@@ -60,7 +58,7 @@ public class AnalyticsLab {
                 .addEventListeners(
                         new Listener(),
                         slashCommandsClientBuilder.build(), // custom commands handler module
-                        serviceManager // custom service manager
+                        serviceManagerBuilder.build() // custom service management module
                 );
 
         shardManager = shardManagerBuilder.build();
@@ -75,9 +73,5 @@ public class AnalyticsLab {
 
     public ShardManager getShardManager() {
         return shardManager;
-    }
-
-    public ServiceManager getServiceManager() {
-        return serviceManager;
     }
 }
