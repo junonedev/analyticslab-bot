@@ -1,4 +1,4 @@
-package pro.analyticslab.bot;
+package pro.analyticslab.bot.util;
 
 public class Emojis {
 

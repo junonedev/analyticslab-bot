@@ -1,7 +1,8 @@
-package pro.analyticslab.bot;
+package pro.analyticslab.bot.util;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import pro.analyticslab.bot.AnalyticsLab;
 
 import javax.annotation.Nonnull;
 import java.io.IOException;

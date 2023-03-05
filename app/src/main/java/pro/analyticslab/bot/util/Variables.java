@@ -1,4 +1,4 @@
-package pro.analyticslab.bot;
+package pro.analyticslab.bot.util;
 
 import com.google.gson.Gson;
 import com.google.gson.JsonElement;
