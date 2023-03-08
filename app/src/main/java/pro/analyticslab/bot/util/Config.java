@@ -22,7 +22,7 @@ public class Config {
 
 
     /**
-     * Get secret environment from `.properties` file
+     * Get secret environment from `config.properties` file
      * @param key Property key
      * @return String
      */

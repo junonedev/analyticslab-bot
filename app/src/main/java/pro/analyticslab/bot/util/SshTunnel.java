@@ -26,7 +26,7 @@ public class SshTunnel {
         @Nonnull String certificatePath,
         int sshPort
     ) throws Exception {
-        URL url = getClass().getResource(certificatePath);
+        URL url = SshTunnel.class.getClassLoader().getResource(certificatePath);
         if (url == null)
             throw new IllegalArgumentException("Invalid SSH key path.");
 
