@@ -79,7 +79,12 @@ public class AnalyticsLab {
                 Config.getProperty("ssh.server.user"),
                 "keys/ssh_id_rsa",
                 22
-        );
+        )
+                .forwardPortLocal(
+                        Integer.parseInt(Config.getProperty("ssh.tunnel.forwardsLocal.database.rPort")),
+                        Config.getProperty("ssh.tunnel.forwardsLocal.database.lHost"),
+                        Integer.parseInt(Config.getProperty("ssh.tunnel.forwardsLocal.database.lPort"))
+                );
 
         new AnalyticsLab();
     }

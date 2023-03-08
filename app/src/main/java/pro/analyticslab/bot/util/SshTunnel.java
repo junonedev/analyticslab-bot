@@ -1,6 +1,7 @@
 package pro.analyticslab.bot.util;
 
 import com.jcraft.jsch.JSch;
+import com.jcraft.jsch.JSchException;
 import com.jcraft.jsch.Session;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -20,7 +21,7 @@ public class SshTunnel {
      * @param certificatePath ssh-rsa auth certificate path
      * @param sshPort SSH server port
      */
-    public void connect(
+    public SshTunnel connect(
         @Nonnull String host,
         @Nonnull String user,
         @Nonnull String certificatePath,
@@ -37,7 +38,9 @@ public class SshTunnel {
         session.setConfig("StrictHostKeyChecking", "no");
 
         session.connect();
-        logger.info("SSH tunnel created on 0.0.0.0");
+        logger.info("SSH-tunnel successfully initialized");
+
+        return this;
     }
 
 
@@ -46,10 +49,17 @@ public class SshTunnel {
      * @param remotePort remote server port
      * @param localPort local available port
      */
-    public void forward(
+    public SshTunnel forwardPortLocal(
             int remotePort,
+            String localHost,
             int localPort
-    ) {
+    ) throws JSchException {
+        session.setPortForwardingL(localPort, localHost, remotePort);
 
+        logger.info(
+                "Added port forwarding (***" +  ":" + remotePort + "): localhost:" + localPort
+        );
+
+        return this;
     }
 }
